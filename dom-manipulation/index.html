@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dynamic Quote Generator — Sync</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px;max-width:900px;margin:auto}
+    label,button,input,select{margin:6px 0;display:block}
+    #quoteDisplay{border:1px solid #ddd;padding:16px;border-radius:6px;margin:12px 0}
+    #notif{background:#fff3cd;border:1px solid #ffeeba;padding:12px;border-radius:6px;display:none}
+    #conflictBox{background:#fff;border:1px solid #ccc;padding:12px;margin-top:8px;border-radius:6px}
+    .small{font-size:13px;color:#555}
+  </style>
 </head>
 <body>
-  <h1>Dynamic Quote Generator</h1>
+  <h1>Dynamic Quote Generator — Sync</h1>
 
-  
-  <label for="categoryFilter">Filter by category:</label>
+  <label for="categoryFilter">Filter by category</label>
   <select id="categoryFilter" onchange="filterQuotes()">
     <option value="all">All Categories</option>
   </select>
@@ -18,17 +25,21 @@
 
   <button id="newQuote">Show New Quote</button>
 
-  <div>
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote">
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category">
-    <button id="addQuote">Add Quote</button>
-  </div>
+  <h3>Add quote</h3>
+  <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+  <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+  <button id="addQuote">Add Quote</button>
 
+  <h3>Import / Export</h3>
+  <button id="exportQuotes">Export Quotes</button>
+  <input type="file" id="importQuotes" accept="application/json" />
 
-  <div>
-    <button id="exportQuotes">Export Quotes</button>
-    <input type="file" id="importQuotes" accept="application/json">
-  </div>
+  <h3>Sync</h3>
+  <div class="small">Server endpoint (mock). Replace with real API URL if you have one.</div>
+  <div class="small">Sync status: <span id="syncStatus">idle</span></div>
+  <button id="forceSync">Force Sync Now</button>
+
+  <div id="notif"></div>
 
   <script src="script.js"></script>
 </body>

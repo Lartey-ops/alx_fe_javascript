@@ -115,6 +115,46 @@ async function postQuoteToServer(quote) {
   }
 }
 
+// Existing quote functions
+function addQuote() { ... }
+function displayQuotes() { ... }
+
+// Local storage functions
+function saveQuotes() { ... }
+function loadQuotes() { ... }
+
+// Server sync functions
+async function fetchQuotesFromServer() { ... }
+async function postQuoteToServer() { ... }
+
+// Place this next ↓↓↓
+async function syncQuotes() {
+  const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+  const serverQuotes = await fetchQuotesFromServer();
+
+  const mergedQuotes = [...serverQuotes];
+  localQuotes.forEach(localQuote => {
+    if (!mergedQuotes.some(q => q.id === localQuote.id)) {
+      mergedQuotes.push(localQuote);
+    }
+  });
+
+  localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+
+  const message = document.createElement("div");
+  message.textContent = "Quotes synced with server!";
+  message.style.position = "fixed";
+  message.style.bottom = "10px";
+  message.style.right = "10px";
+  message.style.background = "#4CAF50";
+  message.style.color = "white";
+  message.style.padding = "10px 20px";
+  message.style.borderRadius = "5px";
+  document.body.appendChild(message);
+
+  setTimeout(() => message.remove(), 3000);
+}
+
 // ===== Conflict Resolution =====
 function resolveConflicts(serverQuotes) {
   let updated = false;

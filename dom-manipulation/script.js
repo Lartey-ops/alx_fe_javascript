@@ -206,3 +206,49 @@ categoryFilter.addEventListener("change", filterQuotes);
 init();
 createAddQuoteForm();
 
+
+function exportToJsonFile() {
+  const dataStr = JSON.stringify(quotes, null, 2); 
+  const blob = new Blob([dataStr], { type: "application/json" }); 
+  const url = URL.createObjectURL(blob); 
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "quotes.json"; 
+  a.click(); 
+  URL.revokeObjectURL(url); 
+}
+
+
+function importFromJsonFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedQuotes = JSON.parse(e.target.result);
+      if (Array.isArray(importedQuotes)) {
+        quotes = importedQuotes.map(q => ({
+          text: q.text,
+          category: q.category || "General",
+          updatedAt: q.updatedAt || Date.now()
+        }));
+        saveQuotes();
+        populateCategories();
+        showRandomQuote();
+        showNotification("Quotes imported successfully.");
+      } else {
+        alert("Invalid JSON format.");
+      }
+    } catch (err) {
+      alert("Error importing file.");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+
+document.getElementById("exportQuotes").addEventListener("click", exportToJsonFile);
+document.getElementById("importQuotes").addEventListener("change", importFromJsonFile);
+
